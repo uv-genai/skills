@@ -1,0 +1,9 @@
+[project]
+name = "cicci"
+version = "0.1.0"
+description = "markdown web crawler"
+authors = [
+    { name = "ugovaretto", email = "ugovaretto@gmail.com" }
+]
+requires-python = ">=3.15.5"
+dependencies = []
