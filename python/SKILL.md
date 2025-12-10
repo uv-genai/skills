@@ -27,7 +27,10 @@ This skill provides guidence for quality focused python development and project 
 * Code formatting must adhere to the PEP8 style guide.
 * Type hints must ALWAYS be used.
 * Code must be properly documented using docstrings and additional comments
-* to clearly explain the purpose and functionality of the code.
+  to clearly explain the purpose and functionality of the code.
+* Error handling must be done properly.
+* All exceptions must be handled properly.
+
 
 ### Software design
 

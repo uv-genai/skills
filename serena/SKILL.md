@@ -27,7 +27,7 @@ Use serean as memory for your project invoking write and read memory to store pr
 
 ## Available Serena Tools
 
-Once configured, these tools are available and MUST be used for any
+Once configured, these tools are available and MUST be used for all
 code development activities: read, write, search, review, edit, re-factor...:
 
 ### File & Project Navigation
@@ -63,8 +63,8 @@ code development activities: read, write, search, review, edit, re-factor...:
 
 ## Initialization - MANDATORY
 
-- Run: 'activate new serena project in current directory'
-- Run: 'peform onboarding'
+- Run: 'activate new Serena project in current directory'
+- Run: 'check onboarding performed, peform onboarding'
 - Run: 'read and follow instructions in the Serena Instruction Manaual'
 
 
