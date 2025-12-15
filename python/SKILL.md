@@ -46,12 +46,13 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
 
 ### Python code editing
 
-1. Plan edit.
-2. Check in the local site-packages, API reference, examples or throught web search
+1. Plan edit: double check that the code is correct before making changes.
+2. Verify that the required packages are installed.
+3. Check in the local site packages, API reference, examples or throught web search
    that the code you are about to write is correct.
-3. After editing code use ruff for linting and mypy to check that typing is correct.
-4. Run 'uv run -m py_compile' on the edited file to check that the code is correct.
-5. If any error occurs go back to step 1.
+4. After editing code use ruff for linting and mypy to check that typing is correct.
+5. Run 'uv run -m py_compile' on the edited file to check that the code is correct.
+6. If any error occurs go back to step 1.
 
 
 ## Software design
