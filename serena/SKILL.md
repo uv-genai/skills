@@ -23,7 +23,9 @@ Supported languages: C#, Python, TypeScript, JavaScript, Go, Rust, Java, and mor
 ## Usage - MANDATORY
 
 Use serena for all code development activities: search, edit, read, review, re-factor.
-Use serean as memory for your project invoking write and read memory to store project status after each code or documentation change.
+Use serena as memory for your project invoking write and read memory to store project status after each code or documentation change.
+Use serena to periodially check if you are aligned with the original requirements by invoking "think about collected information",
+"think about whether you are done" and "think about task adherence".
 
 ## Available Serena Tools
 
