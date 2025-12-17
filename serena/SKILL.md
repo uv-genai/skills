@@ -1,12 +1,11 @@
 ---
-name: serena
-description: Use this skill for adding the Serena Model Context Protocol to any project.
+name: add-serena
+description: Use this skill for adding the Serena Model Context Protocol to any project for editing code and memory management.
 ---
 
 # Add Serena MCP to Any Project
 
 This skill helps you add Serena MCP (Model Context Protocol) to any software project, providing IDE-like semantic code understanding and navigation capabilities with true multi-project support.
-
 
 ## What is Serena MCP?
 
@@ -20,54 +19,19 @@ Serena is a coding agent toolkit that provides:
 
 Supported languages: C#, Python, TypeScript, JavaScript, Go, Rust, Java, and more.
 
-## Usage - MANDATORY
+## Code editing
 
-Use serena for all code development activities: search, edit, read, review, re-factor.
-Use serena as memory for your project invoking write and read memory to store project status after each code or documentation change.
-Use serena to periodially check if you are aligned with the original requirements by invoking "think about collected information",
-"think about whether you are done" and "think about task adherence".
+1. Use Serena for all development tasks: search, edit, re-factor and anything related to editing any file.
+2. Use Serena as your memory constantly invoking 'write memory' to store the information you need to remember and project status.
+3. Constantly invoke Serena think_about_* tools to verify you are aligned with the project plan and goals.
+4. For any code editing activity: read, write, edit, search, re-fctor etc **always** use 
+   Serena MCP's symbolic editing tools: `replace_symbol_body`, `insert_before_symbol`, `insert_after_symbol`, `rename_symbol`, `find_symbol`, etc. instead
+   of raw line‑based edits. They give you precise control over symbols and keep the changes safe.
 
-## Available Serena Tools
+## Memory management
 
-Once configured, these tools are available and MUST be used for all
-code development activities: read, write, search, review, edit, re-factor...:
-
-### File & Project Navigation
-
-- `serena__list_dir` - List directory contents
-- `serena__find_file` - Find files by pattern
-- `serena__read_file` - Read file contents
-- `serena__search_for_pattern` - Search for text patterns
-
-### Symbol-Level Code Understanding
-
-- `serena__get_symbols_overview` - Get overview of symbols in a file
-- `serena__find_symbol` - Find symbol definitions
-- `serena__find_referencing_symbols` - Find all references to a symbol
-- `serena__get_document_symbols` - Get all symbols in a document
-- `serena__get_symbol_definition` - Get symbol definition
-
-### Code Editing (if read_only: false)
-
-- `serena__insert_after_symbol` - Insert code after a symbol
-- `serena__replace_symbol_body` - Replace symbol implementation
-- `serena__delete_symbol` - Delete a symbol
-
-### Memory & Context
-
-- `serena__write_memory` - Store project-specific information
-- `serena__read_memory` - Retrieve stored information
-- `serena__think_about_collected_information` - Analyze collected data
-
-### Project Understanding
-
-- `mcp__serena__onboard` - Analyze and understand project structure
-
-## Initialization - MANDATORY
-
-- Run: 'activate new Serena project in current directory'
-- Run: 'check onboarding performed, peform onboarding'
-- Run: 'read and follow instructions in the Serena Instruction Manaual'
-
-
-
+1. After each change invoke Serena's 'write memory' tool to store the information you need to remember and project status.
+2. To verify the project is on track periodically invoke Serena tools:
+  * "think about whether you are done"
+  * "think about collected information"
+  * "think about task adherence"
