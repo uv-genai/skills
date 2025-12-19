@@ -1,5 +1,5 @@
 ---
-name: add-serena
+name: serena
 description: Use this skill for adding the Serena Model Context Protocol to any project for editing code and memory management.
 ---
 
