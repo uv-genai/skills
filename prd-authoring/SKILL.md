@@ -1,6 +1,7 @@
 ---
 name: prd-authoring
-description: Use this skill for early-stage project planning through Product Requirements Documents (PRDs). Guides users from initial project ideas through product briefs, market research, PRD creation, validation, and epic decomposition. Triggers include "create PRD", "product brief", "validate requirements", or beginning project inception activities.
+description: Guides users from initial project ideas through product briefs, market research, PRD creation, validation, and epic decomposition. Triggers include "create PRD", "product brief", "validate requirements", or beginning project inception activities.
+ Use this skill for early-stage project planning through Product Requirements Documents (PRDs). 
 ---
 
 # PRD Authoring Skill

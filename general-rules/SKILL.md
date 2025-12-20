@@ -1,6 +1,6 @@
 ---
 name: general-rules
-description: Use this skill for all the software development projects.
+description: General rules to apply to software development projects. Use this skill for all the software development projects.
 ---
 
 # MANDATORY RULES

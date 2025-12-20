@@ -1,6 +1,6 @@
 ---
 name: python
-description: Use this skills for managing python projects and developing python code.
+description: Rules for managing python project and for developing python code. Use this skills for managing python projects and developing python code.
 ---
 
 # Python Development Skill
