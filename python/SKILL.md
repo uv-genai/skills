@@ -43,9 +43,9 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
 * All exceptions must be handled properly.
 * Use ruff for linting and formatting.
 * Use mypy for type checking.
-* **MANDATORY**: ALWAYS check with the API reference of the package you are using or the local site package code to see if there is a function class or method that does what you need and then
+* **MANDATORY**: ALWAYS check with the API reference of the package you are using or the local site package code or sample code to see if there is a function class or method that does what you need and then
   verify that the code is correct by checking with the API reference and/or example code.
-* **MANDATORY**: before adding or editing any code **ALWAYS** verify with the API reference, the local site packages, and code examples that the code is correct and that the
+* **MANDATORY**: before adding or editing any code **ALWAYS** verify with the API reference, the local site packages, code examples or web references that the code is correct and that the
   right methods and funcctions are called and the right data types are uses. After modifying code check again that the code is correct and that the
   right mehtods and functions are called and the right data types are used.
 
