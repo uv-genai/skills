@@ -1,6 +1,6 @@
 ---
 name: serena
-description: Use this skill for adding the Serena Model Context Protocol to any project for editing code and memory management.
+description: Use this skill for any software development project to edict code, ensure requirements are met and proejct development is tracked. Also use this skill to add the Serena Model Context Protocol to any project for editing code and memory management.
 ---
 
 # Add Serena MCP to Any Project
@@ -18,6 +18,13 @@ Serena is a coding agent toolkit that provides:
 - **Onboarding and project structure analysis**
 
 Supported languages: C#, Python, TypeScript, JavaScript, Go, Rust, Java, and more.
+
+## Initialization
+
+1. Check if Serena onboarding is needed
+2. If onboarding is needed:
+  1. Activate Serena project in current directory
+  2. Perform Serena onboarding
 
 ## Code editing
 
