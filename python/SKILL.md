@@ -1,6 +1,6 @@
 ---
 name: python
-description: Rules for managing python project and for developing python code. Use this skills for managing python projects and developing python code.
+description: Rules for managing python projects and for developing python code. Use this skills for managing python projects and developing python code.
 ---
 
 # Python Development Skill
@@ -28,6 +28,7 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
 * virtual environment must be created and used.
 * No python package must be installed globally.
 * uv is already installed
+* **MANDATORY**: use hatchling as the build backend.
 
 ## Python development
 
