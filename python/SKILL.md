@@ -7,7 +7,7 @@ description: Rules for managing python projects and for developing python code. 
 
 This skill provides guidance for quality focused python development and project management.
 
-All the instructions in this document ARE MANDATORY and must be followed at all times.
+All the instructions in this document **ARE MANDATORY** and must be followed at all times.
 
 ## Project management
 
@@ -38,7 +38,7 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
 * Do not rush to implement the code, perform proper analysis and use the MCP tools (e.g. Serena) as directed.
 * Prioritize **proper architecture and process** over speed and simplicity.
 * Minimize the use of nested if/else statements by using the match statement.
-* Do not use global variables. Encapulate settings, constants and configuration in dataclasses.
+* Do not use standalone global variables. Encapulate settings, constants and configuration in dataclasses.
 * Code formatting must adhere to the PEP8 style guide.
 * Type hints must ALWAYS be used.
 * Code must be properly documented using docstrings and additional comments
@@ -49,11 +49,13 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
 * All exceptions must be handled properly.
 * Use ruff for linting and formatting.
 * Use mypy for type checking.
-* Never ever ignore the output from ruff, mypy and pycompile, always consider the output to be true and correct.
+* Use py_compile to check that the code is correct.
+* Never ever ignore the output from ruff, mypy and py_compile, always consider the output from these tools to be true and correct.
+* Do not change the code to make errors and warnings go away, fix the errors and warnings instead.
 * **MANDATORY**: ALWAYS check with the API reference of the package you are using or the local site package code or sample code to see if there is a function class or method that does what you need and then
   verify that the code is correct by checking with the API reference and/or example code.
 * **MANDATORY**: before adding or editing any code **ALWAYS** verify with the API reference, the local site packages, code examples or web references that the code is correct and that the
-  right methods and funcctions are called and the right data types are uses. After modifying code check again that the code is correct and that the
+  right methods and functions are called and the right data types are uses. After modifying code check again that the code is correct and that the
   right mehtods and functions are called and the right data types are used.
 * Follow the Hatchlings rulles to organise the project structure and decide where source files should be placed.
 

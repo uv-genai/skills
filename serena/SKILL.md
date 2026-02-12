@@ -1,6 +1,6 @@
 ---
 name: serena
-description: Use this skill for any software development project to edict code, ensure requirements are met and proejct development is tracked. Also use this skill to add the Serena Model Context Protocol to any project for editing code and memory management.
+description: Use this skill for any software development project to edit code, ensure requirements are met and proejct development is tracked. Also use this skill to add the Serena Model Context Protocol to any project for editing code and memory management.
 ---
 
 # Add Serena MCP to Any Project
