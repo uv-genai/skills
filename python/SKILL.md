@@ -16,6 +16,7 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
 
 * uv must be used to manage the project, the dependencies and the configuration.
 * projet.toml must be used to define the project configuration.
+* you are using hatchling as the build backend, follow the hatchling guidelines for project structure.
 
 ### Build and Tooling
 
@@ -47,6 +48,7 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
 * All exceptions must be handled properly.
 * Use ruff for linting and formatting.
 * Use mypy for type checking.
+* Never ever ignore the output from ruff, mypy and pycompile, always consider the output to be true and correct.
 * **MANDATORY**: ALWAYS check with the API reference of the package you are using or the local site package code or sample code to see if there is a function class or method that does what you need and then
   verify that the code is correct by checking with the API reference and/or example code.
 * **MANDATORY**: before adding or editing any code **ALWAYS** verify with the API reference, the local site packages, code examples or web references that the code is correct and that the
