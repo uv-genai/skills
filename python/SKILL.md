@@ -35,6 +35,7 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
 
 ### Python code
 
+* Do not rush to implement the code, perform proper analysis and use the MCP tools (e.g. Serena) as directed.
 * Prioritize **proper architecture and process** over speed and simplicity.
 * Minimize the use of nested if/else statements by using the match statement.
 * Do not use global variables. Encapulate settings, constants and configuration in dataclasses.
@@ -65,11 +66,12 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
    that the code you are about to write is correct.
 4. After editing code use ruff for linting and mypy to check that typing is correct.
 5. Run `uv run -m py_compile` on the edited file to check that the code is correct.
-
 6. If any error occurs go back to step 1.
+7. Do not rush to implement the code, perform proper analysis and use the MCP tools (e.g. Serena) as directed.
 
 ### Additional guidelines for python development
 
+* Follow a proper development process, do not rush to implement the code.
 * Prioritize **proper architecture and process** over speed and simplicity.
 * Do not add support for logging by default. Only if explicitly requested.
 * Do not add support for Docker or containers by default. Only if explicitly requested.
