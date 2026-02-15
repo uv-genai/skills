@@ -21,6 +21,8 @@ Supported languages: C#, Python, TypeScript, JavaScript, Go, Rust, Java, and mor
 
 ## Initialization
 
+- execute `Activate Serena project in current directory` prompt.
+
 1. Check if Serena onboarding is needed
 2. If onboarding is needed:
   1. Activate Serena project in current directory

@@ -1,6 +1,6 @@
 ---
 name: software-architecture
-description: Use this skill for all software development projects, it is also a guide for quality focused software architecture. This skill should be used when users want to write code, design architecture, analyze code, in any case that relates to software development. 
+description: Use this skill for all software development projects, it is also a guide for quality focused software architecture and design. This skill should be used when users want to write code, design architecture, analyze code, in any case that relates to software development. 
 ---
 
 # Software Architecture Development Skill
@@ -13,7 +13,7 @@ This skill provides guidence for quality focused software development and archit
 
 - **Early return pattern**: Always use early returns when possible, over nested conditions for better readability
 - Avoid code duplication through creation of reusable functions and modules
-- Decompose long (more than 80 lines of code) components and functions into multiple smaller components and functions. If they cannot be used anywhere else, keep it in the same file. But if file longer than 200 lines of code, it should be split into multiple files.
+- Decompose long (more than 120 lines of code) components and functions into multiple smaller components and functions. If they cannot be used anywhere else, keep it in the same file. But if file longer than 200 lines of code, it should be split into multiple files.
 - Use arrow functions instead of function declarations when possible
 
 ### Best Practices
@@ -21,10 +21,10 @@ This skill provides guidence for quality focused software development and archit
 #### Library-First Approach
 
 - **ALWAYS search for existing solutions before writing custom code**
-  - Check npm for existing libraries that solve the problem
+  - Check for existing libraries that solve the problem
   - Evaluate existing services/SaaS solutions
   - Consider third-party APIs for common functionality
-- Use libraries instead of writing your own utils or helpers. For example, use `cockatiel` instead of writing your own retry logic.
+- Use libraries instead of writing your own utils or helpers. 
 - **When custom code IS justified:**
   - Specific business logic unique to the domain
   - Performance-critical paths with special requirements
@@ -38,7 +38,6 @@ This skill provides guidence for quality focused software development and archit
   - Follow domain-driven design and ubiquitous language
   - Separate domain entities from infrastructure concerns
   - Keep business logic independent of frameworks
-  - Define use cases clearly and keep them isolated
 - **Naming Conventions:**
   - **AVOID** generic names: `utils`, `helpers`, `common`, `shared`
   - **USE** domain-specific names: `OrderCalculator`, `UserAuthenticator`, `InvoiceGenerator`
@@ -49,6 +48,11 @@ This skill provides guidence for quality focused software development and archit
   - Keep database queries out of controllers
   - Maintain clear boundaries between contexts
   - Ensure proper separation of responsibilities
+- **Documentation**
+  - Document design decisions and rationale
+  - Document the architecture through diagrams documenting both relationships and dependencies
+  - Document dynamic behavior and state transitions
+  - Use diagrams in whichever format is most appropriate for the project
 
 #### Anti-Patterns to Avoid
 
@@ -73,4 +77,6 @@ This skill provides guidence for quality focused software development and archit
 - Avoid deep nesting (max 3 levels)
 - Keep functions focused and under 50 lines when possible
 - Keep files focused and under 200 lines of code when possible
+- All code should be documented thouroughly bu describing purpose and functionality
+- All variable, constants, modules, classes, structures, function and methods must be commented, including arguments to callable enities
 ```

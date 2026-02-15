@@ -51,6 +51,7 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 * Use mypy for type checking.
 * Use py_compile to check that the code is correct.
 * Never ever ignore the output from ruff, mypy and py_compile, always consider the output from these tools to be true and correct.
+* Never ever remove type hints, or make changes to make the code pass mypy, ruff and py_compile.
 * Do not change the code to make errors and warnings go away, fix the errors and warnings instead.
 * **MANDATORY**: ALWAYS check with the API reference of the package you are using or the local site package code or sample code to see if there is a function class or method that does what you need and then
   verify that the code is correct by checking with the API reference and/or example code.
