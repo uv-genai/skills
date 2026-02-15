@@ -88,7 +88,6 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 * Code must be modular and well-structured.
 * Seprate concerns must be clearly defined and separated.
 * Design documents must be created to document the architecture and design of the project.
-* Mermaid diagrams must be used to visually represent the architecture and design.
 
 ## Documentation
 
