@@ -20,7 +20,7 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 
 ### Build and Tooling
 
-* uv must be used to create virtual environments and install dependencies.
+* uv must be use uv to create virtual environments and install dependencies.
   * run `uv venv` to create a virtual environment.
 * uv must be used to build and run the project.
   * run all the scripts with `uv run` or `uv run -m <module_name>`.
@@ -36,6 +36,9 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 ### Python code
 
 * Do not rush to implement the code, perform proper analysis and use the MCP tools (e.g. Serena) as directed.
+* Always verify that the code you write is supported by the modules you import:
+  * verify that functions and methods are present in the modules you import before using them,
+  * verify that all constants and classess are present in the modules you import before using them.
 * Prioritize **proper architecture and process** over speed and simplicity.
 * Minimize the use of nested if/else statements by using the match statement.
 * Do not use standalone global variables. Encapulate settings, constants and configuration in dataclasses.
@@ -63,6 +66,7 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 
 ### Python code editing
 
+0. If available use the Serena MCP to search and edit the code.
 1. Plan edit: double check that the code is correct before making changes.
 2. Verify that the required packages are installed.
 3. Check in the local site packages, API reference, examples or throught web search
@@ -71,6 +75,7 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 5. Run `uv run -m py_compile` on the edited file to check that the code is correct.
 6. If any error occurs go back to step 1.
 7. Do not rush to implement the code, perform proper analysis and use the MCP tools (e.g. Serena) as directed.
+8. Verify that the all the functions, methods, classes, constantst and variables you use are present in the modules you import.
 
 ### Additional guidelines for python development
 

@@ -15,4 +15,5 @@ description: General rules to apply to software development projects. Use this s
 - When implementing command line application always enable new features by adding new command line options, never ever enable a new feature as default, unless explicitly asked.
 - Minimize the amount of code printed on the screen, ontly do it when absolutely necessary to receive feedback from the user.
 - Do not rush to implement the code, always perform a thorough analysis first and consult the documentation.
-- Do not stop implement the features until you are sure that the code works as expected without stopping unless you need input from the user.
+- Do not stop to implement the features until you are sure that the code works as expected without stopping unless you need input from the user.
+- When building and executable always check if it runs.
