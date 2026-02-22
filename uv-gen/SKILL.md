@@ -5,6 +5,9 @@ description: Use this skill to generate a python uv project, specifying name, de
 
 Prompt for information asking ONE BY ONE the following questions.
 
+You must prompt for information as described below, stop until you have acquired all the
+information by prompting the user.
+
 # 1. Prompt for project name
 
 - Prompt for project name
