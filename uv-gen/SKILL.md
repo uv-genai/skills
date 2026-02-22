@@ -32,7 +32,7 @@ information by prompting the user.
 Generate uv project in the current directory using the project name, project description and python version provided by the user:
 
 ```bash
-uv init --name project_name --python python_version --description project_description --bare
+uv init --name {{project_name}} --python {{python_version}} --description {{project_description}} --bare
 ```
 
 
