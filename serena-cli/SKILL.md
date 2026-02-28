@@ -43,6 +43,9 @@ uv tool install "git+https://github.com/uv-genai/serena.git"
 uv tool install "git+https://github.com/uv-genai/serena.git@v0.1.4"
 ```
 
+### Action: You must install Serena CLI if not already installed by installing serena according to the above instructions.
+
+
 #### Option B: Clone and install locally
 ```bash
 git clone https://github.com/oraios/serena.git
