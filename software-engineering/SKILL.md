@@ -1,5 +1,5 @@
 ---
-name: software-architecture
+name: software-engineering
 description: Use this skill for all software development projects, it is also a guide for quality focused software architecture and design. This skill should be used when users want to write code, design architecture, analyze code, in any case that relates to software development. 
 ---
 

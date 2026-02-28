@@ -1,3 +1,8 @@
+---
+name: github-cli
+description: Rules for using the GitHub CLI to interact with GitHub repositories.
+---
+
 # GitHub CLI Skill
 
 This skill defines how the coding agent should use the `gh` command‑line tool to interact with GitHub. The agent runs inside an existing git repository and the GitHub authentication token is available in the environment variable `GH_TOKEN`.
