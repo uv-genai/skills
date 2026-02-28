@@ -30,6 +30,8 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 * No python package must be installed globally.
 * uv is already installed
 * **MANDATORY**: use hatchling as the build backend.
+* do not create a `main.py` file in the root of the project.
+* pass the correct python version to `uv init --python` when creating the project.
 
 ## Python development
 
@@ -87,6 +89,13 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 * Stick to the requirements, do not add additional features unless explicitly requested, but feel free to ask the author for advice.
 * Do not take shortcuts.
 * Follow the requirements and be thorough not quick.
+
+### Quality control, important and mandatory
+
+* check that each of the required features is implemented by mapping the feature to the code that implements it.
+* when developing applications run the application to verify it starts.
+* commit changes to the repository continuously so that you can roll back to a previous version if necessary.
+
 
 ## Software design
 

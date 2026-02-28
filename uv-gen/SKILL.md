@@ -6,7 +6,8 @@ description: Use this skill to generate a python uv project, specifying name, de
 Prompt for information asking ONE BY ONE the following questions.
 
 You must prompt for information as described below, stop until you have acquired all the
-information by prompting the user.
+information by prompting the user. Ask all three questions, project name, project description and
+python version, one by one.
 
 # 1. Prompt for project name
 
@@ -22,10 +23,6 @@ information by prompting the user.
 
 - Prompt for python version
 - wait for user imput and store it in variable 'python_version', use current python version if not provided.
-
-# 4. Set author
-
-- Set author to current user.
 
 # Generate project
 
