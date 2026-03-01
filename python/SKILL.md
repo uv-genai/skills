@@ -37,6 +37,7 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 
 ### Python code
 
+* Never ever use heredoc, do not use heredoc in any circumstances.
 * Do not rush to implement the code, perform proper analysis and use the MCP tools (e.g. Serena) as directed.
 * Always verify that the code you write is supported by the modules you import:
   * verify that functions and methods are present in the modules you import before using them,
