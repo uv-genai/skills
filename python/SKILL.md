@@ -32,13 +32,15 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 * **MANDATORY**: use hatchling as the build backend.
 * do not create a `main.py` file in the root of the project.
 * pass the correct python version to `uv init --python` when creating the project.
+* you are not allowed to call python, python3 or python3.x or pip, or pip3 directly
 
 ## Python development
 
 ### Python code
 
 * Never ever use heredoc, do not use heredoc in any circumstances.
-* Do not rush to implement the code, perform proper analysis and use the MCP tools (e.g. Serena) as directed.
+* Do not rush to implement the code, perform proper analysis and plan before implementing the code.
+* Map each feature to the code that implements it and review the code to ensure that it is correct and implements the feature.
 * Always verify that the code you write is supported by the modules you import:
   * verify that functions and methods are present in the modules you import before using them,
   * verify that all constants and classess are present in the modules you import before using them.
@@ -69,7 +71,7 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 
 ### Python code editing
 
-0. If available use the Serena MCP to search and edit the code.
+0. If available use the serena command line tools to search and edit the code.
 1. Plan edit: double check that the code is correct before making changes.
 2. Verify that the required packages are installed.
 3. Check in the local site packages, API reference, examples or throught web search
