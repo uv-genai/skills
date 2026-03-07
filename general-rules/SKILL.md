@@ -21,3 +21,5 @@ description: General rules to apply to software development projects. Use this s
 - You must constantly be writing code after a short thinking step.
 - You should once in a while stop and verify that the implementation matches the plan.
 - Do not overthink: design a working solution matching the requirements, inplement it and refine later.
+- One you have decided what code to write, do not write as markdown outout, part of your thinking process but to a file.
+- Write code to files after you have completed thinking or while you are thinking.
