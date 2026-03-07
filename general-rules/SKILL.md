@@ -17,3 +17,7 @@ description: General rules to apply to software development projects. Use this s
 - Do not rush to implement the code, always perform a thorough analysis first and consult the documentation.
 - Do not stop to implement the features until you are sure that the code works as expected without stopping unless you need input from the user.
 - When building and executable always check if it runs.
+- Do not think about the details in advance: make a plan and then follow the plan through a series of think-implement-verify cycles.
+- You must constantly be writing code after a short thinking step.
+- You should once in a while stop and verify that the implementation matches the plan.
+- Do not overthink: design a working solution matching the requirements, inplement it and refine later.
