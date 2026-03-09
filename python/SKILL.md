@@ -31,8 +31,9 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 * uv is already installed
 * **MANDATORY**: use hatchling as the build backend.
 * do not create a `main.py` file in the root of the project.
-* pass the correct python version to `uv init --python` when creating the project.
-* you are not allowed to call python, python3 or python3.x or pip, or pip3 directly
+* pass the correct python version to `uv init --bare --python` when creating the project.
+* you are not allowed to call python, python3 or python3.x or pip, or pip3 directly.
+* use the `uv init --bare` option to avoid creating the `main.py` file.
 
 ## Python development
 

@@ -23,3 +23,8 @@ description: General rules to apply to software development projects. Use this s
 - Do not overthink: design a working solution matching the requirements, inplement it and refine later, but always verify it's correct.
 - One you have decided what code to write, do not write as markdown outout, part of your thinking process but to a file.
 - Write code to files after you have completed thinking or while you are thinking.
+- Do not use more than 8192 tokens for thinking tasks.
+- Constantly check for repetition:
+  - chek if the previous two outputs are the same
+  - within the output text look for repeated sentences
+  - stop repeating yourself as soon as repetition is detected
