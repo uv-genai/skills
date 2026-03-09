@@ -34,6 +34,8 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
 
 ### Python code
 
+* Minimize the use of nested if/else statements by using the match statement.
+* Do not use global variables. Encapulate settings, constants and configuration in dataclasses.
 * Code formatting must adhere to the PEP8 style guide.
 * Type hints must ALWAYS be used.
 * Code must be properly documented using docstrings and additional comments
@@ -49,6 +51,7 @@ All the instructions in this document ARE MANDATORY and must be followed at all 
 * **MANDATORY**: before adding or editing any code **ALWAYS** verify with the API reference, the local site packages, code examples or web references that the code is correct and that the
   right methods and funcctions are called and the right data types are uses. After modifying code check again that the code is correct and that the
   right mehtods and functions are called and the right data types are used.
+* Follow the Hatchlings rulles to organise the project structure and decide where source files should be placed.
 
 
 ### Python code editing
