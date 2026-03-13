@@ -1,21 +1,31 @@
 ---
 name: web-tools
-description: Provides three CLI utilities (search-tool, fetch-tool, download-tool) for web search, page fetch, and file download.
+description: Provides four CLI utilities (search-tool, ddg-search, fetch-tool, download-tool) for web search, page fetch, and file download.
 ---
 
 # Web Tools Skill for Coding Agents
 
 ## Overview
-The **web-tools** package provides three command‑line utilities that coding agents can invoke to interact with the web:
+The **web-tools** package provides four command‑line utilities that coding agents can invoke to interact with the web:
 
 
 | Tool | Purpose | Main modes |
 |------|---------|-----------|
-| **search-tool** | Perform a web search using the DuckDuckGo Instant Answer API and return the first N results as JSON. | `search-tool "<query>" -n <N>` |
-| **fetch-tool** | Load a single web page (headless Chrome) and return either the raw HTML or a structured JSON representation (title, headings, tables, links). | `uv fetch-tool "<url>" -m plain` or `fetch-tool "<url>" -m json` |
+| **search-tool** | Perform a web search using the DuckDuckGo Instant Answer API. Returns instant answers from Wikipedia and curated sources. | `search-tool "<query>" -n <N>` |
+| **ddg-search** | Perform a full web search by scraping DuckDuckGo HTML results. Returns comprehensive search results with title, url, and snippet. | `ddg-search "<query>" -n <N>` |
+| **fetch-tool** | Load a single web page (headless Chrome) and return either the raw HTML or a structured JSON representation (title, headings, tables, links). | `fetch-tool "<url>" -m plain` or `fetch-tool "<url>" -m json` |
 | **download-tool** | Download a single file (prefers `wget` if available, otherwise falls back to `requests`). Can output a JSON summary with file metadata. | `download-tool "<url>" -m plain` or `download-tool "<url>" -m json` |
 
 All tools output **machine‑readable JSON** (or raw HTML for fetch‑tool plain mode) which downstream agents can parse and act upon.
+
+### When to use which search tool?
+
+| Scenario | Recommended Tool |
+|----------|------------------|
+| Quick lookup of a concept, person, or term | `search-tool` (Instant Answer API) |
+| Full web search with comprehensive results | `ddg-search` (HTML scraping) |
+| Finding specific websites, articles, or resources | `ddg-search` |
+| Getting Wikipedia-style summaries | `search-tool` |
 
 
 ## 1. Prerequisites & Installation
@@ -36,7 +46,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 uv tool install "git+https://github.com/uv-genai/web-tools.git"
 
 # Or install a specific tag/version
-uv tool install "git+https://github.com/uv-genai/web-tools.git@v0.1.6"
+uv tool install "git+https://github.com/uv-genai/web-tools.git@v0.1.8"
 ```
 
 #### Option B: Clone and install locally
@@ -50,12 +60,14 @@ uv sync                     # installs all dependencies
 
 After installation, the following commands will be available on your `$PATH`:
 - `search-tool`
+- `ddg-search`
 - `fetch-tool`
 - `download-tool`
 
 Verify installation:
 ```bash
 search-tool --help
+ddg-search --help
 fetch-tool --help
 download-tool --help
 ```
@@ -63,13 +75,14 @@ download-tool --help
 
 ---
 
-## 2. Search Tool (`search-tool`)
+## 2. Search Tool (`search-tool`) - Instant Answers
 
 ### Command
 ```bash
 search-tool "<query>" -n <N>
 ```
-* `<query>` – the search string (quotes required if it contains spaces). n* `-n <N>` – number of results to return (default 10).
+* `<query>` – the search string (quotes required if it contains spaces).
+* `-n <N>` – number of results to return (default 10).
 
 ### JSON output schema
 ```json
@@ -82,22 +95,78 @@ search-tool "<query>" -n <N>
   ...
 ]
 ```
-Each object represents a search result. Agents can iterate over the array, extract URLs, and feed them to `fetch-tool` or `download-tool`.
+Each object represents a search result from the DuckDuckGo Instant Answer API. **Note**: This API only returns results from curated sources like Wikipedia. For full web search, use `ddg-search`.
 
 ### Example
 ```bash
-search-tool "open source licenses" -n 3
+search-tool "Python programming language" -n 3
 ```
 ```json
 [
-  {"title":"Open source licenses – Wikipedia","url":"https://en.wikipedia.org/wiki/Open_source_license","snippet":""},
-  {"title":"Open‑source license – The Week","url":"https://theweek.com/...","snippet":""},
-  {"title":"Choosing a License – The Week","url":"https://theweek.com/...","snippet":""}
+  {"title":"Python (programming language) - Wikipedia","url":"https://en.wikipedia.org/wiki/Python_(programming_language)","snippet":""},
+  ...
 ]
 ```
+
 ---
 
-## 3. Fetch Tool (`fetch-tool`)
+## 3. DuckDuckGo Search (`ddg-search`) - Full Web Search
+
+### Command
+```bash
+ddg-search "<query>" -n <N>
+```
+* `<query>` – the search string (quotes required if it contains spaces).
+* `-n <N>` – number of results to return (default 10).
+
+### JSON output schema
+```json
+[
+  {
+    "title": "string",
+    "url": "string",
+    "snippet": "string"
+  },
+  ...
+]
+```
+Each object represents a search result with a descriptive snippet. This tool scrapes DuckDuckGo HTML search results using Selenium, providing comprehensive web search coverage.
+
+### Example
+```bash
+ddg-search "open source licenses" -n 3
+```
+```json
+[
+  {
+    "title": "Open source license - Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Open-source_license",
+    "snippet": "Open-source licenses are licenses that comply with the Open Source Definition..."
+  },
+  {
+    "title": "Choose a License - Creative Commons",
+    "url": "https://creativecommons.org/choose/",
+    "snippet": "Creative Commons licenses provide a flexible range of protections..."
+  },
+  ...
+]
+```
+
+### When to use `ddg-search` vs `search-tool`
+
+Use `ddg-search` when you need:
+- Comprehensive web search results (not just Wikipedia/curated sources)
+- Snippets/descriptions for each result
+- To find specific websites, articles, or resources
+
+Use `search-tool` when you need:
+- Quick lookups from Wikipedia and other curated sources
+- Faster results (no Selenium overhead)
+- Lightweight API-based search
+
+---
+
+## 4. Fetch Tool (`fetch-tool`)
 
 ### Command
 ```bash
@@ -108,7 +177,7 @@ fetch-tool "<url>" -m plain
 fetch-tool "<url>" -m json
 ```
 * `<url>` – the web page to retrieve.
-* `-m plain` – prints the page’s HTML to stdout (binary‑safe). 
+* `-m plain` – prints the page's HTML to stdout (binary‑safe). 
 * `-m json` – prints a JSON object with extracted structure.
 
 ### JSON output schema (when `-m json`)
@@ -144,7 +213,7 @@ fetch-tool "https://example.com" -m json
 ```
 ---
 
-## 4. Download Tool (`download-tool`)
+## 5. Download Tool (`download-tool`)
 
 ### Command
 ```bash
@@ -169,7 +238,7 @@ download-tool "<url>" -m json
   "error": "string" | null
 }
 ```
-`size` is the number of bytes, `sha256` is the file’s SHA‑256 hash, and `error` contains any failure message.
+`size` is the number of bytes, `sha256` is the file's SHA‑256 hash, and `error` contains any failure message.
 
 ### Example
 ```bash
@@ -187,23 +256,25 @@ download-tool "https://example.com/file.zip" -m json
 ```
 ---
 
-## 5. Workflow Patterns for Agents
+## 6. Workflow Patterns for Agents
 
 1. **Search → Fetch → Process**
    ```bash
-   # 1) Get URLs from a search
-   urls=$(search-tool "python web scraping" -n 5 | jq -r '.[].url')
+   # 1) Get URLs from a search (use ddg-search for comprehensive results)
+   urls=$(ddg-search "python web scraping" -n 5 | jq -r '.[].url')
    # 2) For each URL, fetch structured data
    for u in $urls; do
        fetch-tool "$u" -m json | jq '.'
    done
    ```
+
 2. **Search → Download**
    ```bash
    # Find a direct download link via search, then download it
-   dl_url=$(search-tool "latest pandas wheel" -n 1 | jq -r '.[0].url')
+   dl_url=$(ddg-search "latest pandas wheel" -n 1 | jq -r '.[0].url')
    download-tool "$dl_url" -m json
    ```
+
 3. **Fetch → Download assets**
    ```bash
    # Extract all links from a page and download each as a file
@@ -214,18 +285,27 @@ download-tool "https://example.com/file.zip" -m json
          done
    ```
 
+4. **Quick lookup with search-tool**
+   ```bash
+   # Get Wikipedia-style instant answers
+   search-tool "Python programming language" -n 3 | jq '.'
+   ```
+
+5. **Comprehensive search with ddg-search**
+   ```bash
+   # Full web search with snippets
+   ddg-search "how to install docker on ubuntu" -n 5 | jq '.'
+   ```
+
 These patterns let a coding agent orchestrate web interactions without needing to write any additional code – just invoke the provided CLI utilities.
 
 ---
 
-## 6. Error handling
-* If a tool returns a non‑zero exit code, the agent should treat the operation as failed and inspect the `error` field (for `download-tool`) or the absence of output (for `search-tool`/`fetch-tool`).
+## 7. Error handling
+* If a tool returns a non‑zero exit code, the agent should treat the operation as failed and inspect the `error` field (for `download-tool`) or the absence of output (for `search-tool`/`ddg-search`/`fetch-tool`).
 * For `download-tool` JSON mode, check `status`. If it is `failed`, the `error` field contains a human‑readable description.
 * For `fetch-tool` plain mode, a missing file or empty output usually indicates a network or rendering problem.
-
----
-
-## 7. Workflow Patterns for Agents
+* For `ddg-search`, an empty array `[]` means no results were found or the page failed to load.
 
 ---
 
