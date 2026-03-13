@@ -31,7 +31,8 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 * uv is already installed
 * **MANDATORY**: use hatchling as the build backend.
 * do not create a `main.py` file in the root of the project.
-* pass the correct python version to `uv init --bare --python` when creating the project.
+* pass the correct python version to `uv init -python` when creating the project.
+* uv's `--bare` option must be used to avoid creating the `main.py` file.
 * you are not allowed to call python, python3 or python3.x or pip, or pip3 directly.
 * use the `uv init --bare` option to avoid creating the `main.py` file.
 
@@ -39,10 +40,8 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 
 ### Python code
 
-<<<<<<< HEAD
 * Minimize the use of nested if/else statements by using the match statement.
 * Do not use global variables. Encapulate settings, constants and configuration in dataclasses.
-=======
 * Never ever use heredoc, do not use heredoc in any circumstances.
 * Do not rush to implement the code, perform proper analysis and plan before implementing the code.
 * Map each feature to the code that implements it and review the code to ensure that it is correct and implements the feature.
@@ -52,7 +51,6 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 * Prioritize **proper architecture and process** over speed and simplicity.
 * Minimize the use of nested if/else statements by using the match statement.
 * Do not use standalone global variables. Encapulate settings, constants and configuration in dataclasses.
->>>>>>> refs/remotes/origin/main
 * Code formatting must adhere to the PEP8 style guide.
 * Type hints must ALWAYS be used.
 * Code must be properly documented using docstrings and additional comments

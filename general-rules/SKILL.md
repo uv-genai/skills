@@ -28,3 +28,5 @@ description: General rules to apply to software development projects. Use this s
   - chek if the previous two outputs are the same
   - within the output text look for repeated sentences
   - stop repeating yourself as soon as repetition is detected
+- You are not allowed to browse or access directories other than the current project directory, if you need to access other paths you must get permission from the user
+- Ask the user for permission to delete files and directories
