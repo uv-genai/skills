@@ -7,6 +7,7 @@ description: General rules to apply to software development projects. Use this s
 
 - No mockups, dummies, placehoders, fallbacks or defaults.
 - No simplified tests.
+- Plan, design and think about the implementation steps before writing code. Verifying that the logic is correct.
 - Before writing code think about the impact of the code you are writing and if it is aligned with the project goals.
 - Before writing code verify that the code you are about to write is correct and does not generate any bugs.
 - Before writing code systematically check with the API documentation, API code and code samples (if available) to verify that the code implements the expected behavior.
@@ -26,10 +27,12 @@ description: General rules to apply to software development projects. Use this s
 - You must constantly be writing code after a short thinking step.
 - You should once in a while stop and verify that the implementation matches the plan.
 - Constantly check for repetition:
-  - chek if the previous two outputs are the same
+  - check if the previous two outputs are the same
   - within the output text look for repeated sentences
   - stop repeating yourself as soon as repetition is detected
+- Never ever commit any change until you are sure that the code works as expected.
+- Think through the logic before writing code.
 - You are not allowed to browse or access directories other than the current project directory, if you need to access other paths you must get permission from the user
 - Ask the user for permission to delete files and directories
 - when building an interactive application start by running a test that simulates user interaction, log all events and actions and verify that they implement the expected behavior.
--
+
