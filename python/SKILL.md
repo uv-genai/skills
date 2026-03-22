@@ -40,6 +40,7 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 
 ### Python code
 
+* constants **MUST** be defined in frozen dataclasses. Use frozen dataclasses to define constants.
 * Minimize the use of nested if/else statements by using the match statement.
 * Do not use global variables. Encapulate settings, constants and configuration in dataclasses.
 * Never ever use heredoc, do not use heredoc in any circumstances.

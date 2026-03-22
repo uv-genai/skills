@@ -7,7 +7,7 @@ description: update AGENTS.md, update README.md, if git repository not created, 
 When the user types `/version-commit-tag` in the chat, the skill will:
 
 1. if the git repository is not created, create it
-2. bump up the version everywhere
+2. if there is already a tag, bump up the version everywhere, if not use the current version
 3. update AGENTS.md with latest informationa about:
   1. project description
   2. design decisions
