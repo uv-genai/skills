@@ -5,6 +5,8 @@ description: General rules to apply to software development projects. Use this s
 
 # MANDATORY RULES FOR SOFTWARE DEVELOPMENT
 
+- No regressions.
+- Do not modify code that works.
 - No mockups, dummies, placehoders, fallbacks or defaults.
 - No simplified tests.
 - Plan, design and think about the implementation steps before writing code. Verifying that the logic is correct.
