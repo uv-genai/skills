@@ -21,6 +21,7 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 ### Build and Tooling
 
 * uv must be use uv to create virtual environments and install dependencies.
+* never ever install anything in the global site-packages, never ever use python, python3, pip or `uv tool` directly.
   * run `uv venv` to create a virtual environment.
 * uv must be used to build and run the project.
   * run all the scripts with `uv run` or `uv run -m <module_name>`.
