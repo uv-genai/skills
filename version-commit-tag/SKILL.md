@@ -17,4 +17,9 @@ When the user types `version-commit-tag` or `vct` in the chat, the skill will:
   4. changelog
 5. update README.md with latest information
 6. commit the changes
-7. tag the commit with the new version
+7. tag the commit with the new version number
+
+IMPORTANT:
+
+- AGENTS.md file must be located in the root of the repository.
+- README.md file must be located in the top level project directory containing all the source code directories and files.
