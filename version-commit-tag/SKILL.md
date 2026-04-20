@@ -1,10 +1,10 @@
 ---
-description: update AGENTS.md, update README.md, if git repository not created, create it, commit and tag.
+description: when typing `vct` or `version-commit-tag`: update AGENTS.md, update README.md, if git repository not created, create it, commit and tag.
 ---
 
 # /version-commit-tag
 
-When the user types `/version-commit-tag` in the chat, the skill will:
+When the user types `version-commit-tag` or `vct` in the chat, the skill will:
 
 1. if the git repository is not created, create it
 2. if not present, create a proper .gitignore file
