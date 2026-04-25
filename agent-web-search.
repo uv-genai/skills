@@ -1,0 +1,492 @@
+<skill name="agent-web-search" location="/Users/ugo/.pi/agent/skills/agent-web-search/SKILL.md">
+References are relative to /Users/ugo/.pi/agent/skills/agent-web-search.
+
+# Agent Web Search Skill for Coding Agents
+
+## Overview
+
+The **agent-web-search** package provides two powerful command-line utilities for web search and content fetching:
+
+| Tool | Purpose | Main modes |
+|------|---------|-----------|
+| **brave-search** | Privacy-focused web search using Brave's independent search index | `brave-search "<query>" -n <N> [--json]` |
+| **linkup-search** | AI-specific agentic search with deep research capability | `linkup-search search "<query>" -n <N> [--json]`<br>`linkup-search fetch "<url>" [--json]` |
+
+Both tools output **machine-readable JSON** for coding agents and human-readable formatted text by default.
+
+---
+
+## 1. Prerequisites & Installation
+
+### Requirement: `uv`
+
+The **agent-web-search** package relies on `uv` for dependency management and execution. If `uv` is not installed, install it first:
+
+```bash
+# Install uv (one-time setup)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### Installing agent-web-search
+
+#### Option A: Install from GitHub (recommended for latest version)
+```bash
+# Install directly from the main branch
+uv tool install "git+https://github.com/uv-genai/agent-web-search.git"
+
+# Or install a specific version
+uv tool install "git+https://github.com/uv-genai/agent-web-search.git@v2.0.0"
+```
+
+#### Option B: Clone and install locally
+```bash
+git clone https://github.com/uv-genai/agent-web-search.git
+cd agent-web-search
+uv sync
+```
+
+After installation, the following commands will be available on your `$PATH`:
+- `brave-search`
+- `linkup-search`
+
+Verify installation:
+```bash
+brave-search --help
+linkup-search --help
+```
+
+### Setting Up API Keys
+
+Before using the tools, you need API keys:
+
+```bash
+# Get Brave Search API key from https://api-dashboard.search.brave.com/
+export BRAVE_API_KEY="your-brave-api-key-here"
+
+# Get Linkup API key from https://app.linkup.so/
+export LINKUP_API_KEY="your-linkup-api-key-here"
+```
+
+Or create a `.env` file in your project:
+```bash
+cp /path/to/agent-web-search/.env.example .env
+# Edit .env with your API keys
+```
+
+---
+
+## 2. Brave Search Tool (`brave-search`)
+
+### Command
+```bash
+brave-search "<query>" [-n <N>] [--json]
+```
+
+* `<query>` – the search string (quotes required if it contains spaces)
+* `-n <N>` – number of results to return (default: 10, max: 100)
+* `--json` – output raw JSON instead of formatted text
+
+### JSON output schema
+```json
+{
+  "query": "string",
+  "num_results_requested": int,
+  "num_results_found": int,
+  "results": [
+    {
+      "title": "string",
+      "url": "string",
+      "description": "string",
+      "engine": "brave_search"
+    },
+    ...
+  ]
+}
+```
+
+### Example
+```bash
+brave-search "python web scraping" -n 5
+```
+
+**Formatted output:**
+```
+============================================================
+Brave Search Results for: python web scraping
+Showing 5 results
+============================================================
+
+1. Web Scraping with Python - Real Python
+   URL: https://realpython.com/python-web-scraping/
+   Description: Learn how to scrape websites using Python libraries...
+
+2. Beautiful Soup Tutorial - W3Schools
+   URL: https://www.w3schools.com/python/beautiful_soup.asp
+   Description: Beautiful Soup is a library that makes it easy to...
+
+...
+```
+
+**JSON output:**
+```bash
+brave-search "python web scraping" -n 3 --json
+```
+```json
+{
+  "query": "python web scraping",
+  "num_results_requested": 3,
+  "num_results_found": 50,
+  "results": [
+    {
+      "title": "Web Scraping with Python - Real Python",
+      "url": "https://realpython.com/python-web-scraping/",
+      "description": "Learn how to scrape websites using Python libraries...",
+      "engine": "brave_search"
+    },
+    ...
+  ]
+}
+```
+
+---
+
+## 3. Linkup Search Tool (`linkup-search`)
+
+### Search Mode
+
+#### Command
+```bash
+linkup-search search "<query>" [-n <N>] [--depth <depth>] [--output-type <type>] [--json]
+```
+
+* `<query>` – the search string (quotes required if it contains spaces)
+* `-n <N>` – number of results to return (default: 10, max: 100)
+* `--depth <depth>` – search depth: `standard` (fast) or `deep` (thorough, default: standard)
+* `--output-type <type>` – output type: `searchResults`, `sourcedAnswer`, or `structured` (default: searchResults)
+* `--json` – output raw JSON instead of formatted text
+* `--from-date <YYYY-MM-DD>` – filter results from date (optional)
+* `--to-date <YYYY-MM-DD>` – filter results to date (optional)
+* `--include-domains <domain1> [domain2 ...]` – restrict to specific domains (optional)
+* `--exclude-domains <domain1> [domain2 ...]` – exclude specific domains (optional)
+
+### Search JSON output schema (searchResults)
+```json
+{
+  "mode": "search",
+  "query": "string",
+  "parameters": {
+    "num_results_requested": int,
+    "depth": "string",
+    "output_type": "string"
+  },
+  "results": [
+    {
+      "name": "string",
+      "url": "string",
+      "content": "string",
+      "type": "source"
+    },
+    ...
+  ],
+  "total_found": int,
+  "error": false
+}
+```
+
+### Example
+```bash
+linkup-search search "open source licenses" -n 5
+```
+
+**Formatted output:**
+```
+============================================================
+Linkup Search Results for: open source licenses
+Depth: standard, Output Type: searchResults
+Showing up to 5 results
+============================================================
+
+1. Open Source Licenses – Wikipedia
+   URL: https://en.wikipedia.org/wiki/Open_source_license
+   Content: An open-source license is a type of license for computer software and other products...
+
+2. Choosing an Open Source License – GitHub
+   URL: https://choosealicense.com/
+   Content: There are many different open source licenses available. This guide helps you choose...
+
+...
+```
+
+**JSON output:**
+```bash
+linkup-search search "machine learning 2026" --depth deep -n 3 --json
+```
+```json
+{
+  "mode": "search",
+  "query": "machine learning 2026",
+  "parameters": {
+    "num_results_requested": 3,
+    "depth": "deep",
+    "output_type": "searchResults"
+  },
+  "results": [
+    {
+      "name": "Machine Learning Trends 2026 - arXiv",
+      "url": "https://arxiv.org/abs/2601.12345",
+      "content": "Recent advances in machine learning...",
+      "type": "source"
+    },
+    ...
+  ],
+  "total_found": 150,
+  "error": false
+}
+```
+
+### Fetch Mode
+
+#### Command
+```bash
+linkup-search fetch "<url>" [--output-format <format>] [--render-js] [--json]
+```
+
+* `<url>` – the URL to fetch
+* `--output-format <format>` – output format: `html` or `markdown` (default: markdown)
+* `--render-js` – execute JavaScript to capture dynamic content (optional)
+* `--json` – output raw JSON instead of formatted text
+
+### Fetch JSON output schema
+```json
+{
+  "mode": "fetch",
+  "url": "string",
+  "parameters": {
+    "output_format": "string",
+    "render_js": boolean
+  },
+  "content": "string",
+  "error": false
+}
+```
+
+### Example
+```bash
+linkup-search fetch "https://docs.python.org/3/tutorial/"
+```
+
+**Formatted output:**
+```
+============================================================
+Fetching: https://docs.python.org/3/tutorial/
+Format: markdown, Render JS: False
+============================================================
+
+URL: https://docs.python.org/3/tutorial/
+Format: markdown
+Timestamp: 2026-02-28T12:00:00Z
+
+------------------------------------------------------------
+
+Python Tutorial
+=================
+
+Welcome to the official Python tutorial...
+
+...
+```
+
+**JSON output:**
+```bash
+linkup-search fetch "https://docs.python.org/3/tutorial/" --json
+```
+```json
+{
+  "mode": "fetch",
+  "url": "https://docs.python.org/3/tutorial/",
+  "parameters": {
+    "output_format": "markdown",
+    "render_js": false
+  },
+  "content": "Python Tutorial\n=================\n\nWelcome to the official Python tutorial...\n...",
+  "error": false
+}
+```
+
+---
+
+## 4. Workflow Patterns for Agents
+
+### Pattern 1: Search → Process Results
+```bash
+# Get search results and process them
+results=$(brave-search "python web scraping" -n 5 --json)
+echo "$results" | jq -r '.results[].url' | while read url; do
+    # Process each URL
+    echo "Processing: $url"
+done
+```
+
+### Pattern 2: Deep Research with Linkup
+```bash
+# Use Linkup for deep research on complex topics
+linkup-search search "AI trends 2026" --depth deep --output-type sourcedAnswer --json
+```
+
+### Pattern 3: Search → Fetch Content
+```bash
+# Search for relevant pages, then fetch their content
+urls=$(linkup-search search "python tutorials" -n 3 --json | jq -r '.results[].url')
+for url in $urls; do
+    content=$(linkup-search fetch "$url" --json | jq -r '.content')
+    # Process the content
+    echo "Content from $url:"
+    echo "$content" | head -20
+done
+```
+
+### Pattern 4: Domain-Restricted Search
+```bash
+# Search only within specific domains
+linkup-search search "machine learning tutorials" \
+  --include-domains arxiv.org,github.com \
+  -n 10 \
+  --json
+```
+
+### Pattern 5: Date-Filtered Research
+```bash
+# Find recent content from the last 30 days
+linkup-search search "web scraping best practices" \
+  --from-date 2026-01-01 \
+  -n 5 \
+  --json
+```
+
+---
+
+## 5. Error Handling
+
+### Common Error Scenarios
+
+#### Missing API Key
+```bash
+# Error message:
+# Error: BRAVE_API_KEY environment variable not set.
+# Get your free API key from: https://api-dashboard.search.brave.com/
+# Set it with: export BRAVE_API_KEY='your-api-key-here'
+```
+
+#### Invalid Query
+```bash
+# Both tools will return error JSON with status code
+{
+  "error": true,
+  "message": "Invalid query format",
+  "status_code": 400
+}
+```
+
+#### Network Timeout
+```bash
+{
+  "error": true,
+  "message": "Request timed out"
+}
+```
+
+### Best Practices for Agents
+
+1. **Always check exit codes** - Non-zero exit codes indicate failures
+2. **Parse JSON error fields** - Look for `error: true` in JSON output
+3. **Handle timeouts gracefully** - Both tools have built-in timeouts (30s for Brave, 60s for Linkup)
+4. **Validate API keys** - Ensure environment variables are set before making requests
+5. **Limit result counts** - Use reasonable values (5-20) to avoid rate limits
+
+---
+
+## 6. Comparison: Brave Search vs Linkup Search
+
+| Feature | Brave Search | Linkup Search |
+|---------|-------------|---------------|
+| **Best for** | Quick, private searches | AI/factual research |
+| **Speed** | Fast (~1-3s) | Fast/Deep (~1-10s) |
+| **Factuality** | Good | ⭐ SOTA (#1 on SimpleQA) |
+| **Content Fetching** | ❌ No | ✅ Yes |
+| **Deep Research** | ❌ No | ✅ Yes |
+| **Date Filtering** | ✅ Yes | ✅ Yes |
+| **Domain Filtering** | ✅ Yes | ✅ Yes |
+| **JavaScript Render** | ❌ No | ✅ Yes |
+| **Markdown Output** | ❌ No | ✅ Yes |
+| **Free Tier** | 2,000/mo | Available |
+
+### When to Use Each
+
+**Choose Brave Search when:**
+- Privacy is the primary concern
+- Queries are straightforward
+- Need fast, basic results
+- No budget for API calls
+- Simple citation needs
+
+**Choose Linkup Search when:**
+- Building AI applications
+- Need highly factual responses
+- Complex research questions
+- Want natural language answers
+- Need to fetch webpage content
+- Require structured data extraction
+
+---
+
+## 7. Advanced Usage
+
+### Custom Result Counts
+```bash
+# Get more comprehensive results
+brave-search "web development" -n 50
+
+# Get focused results
+linkup-search search "python basics" -n 3 --json
+```
+
+### Multiple Output Types (Linkup)
+```bash
+# Get a natural language answer with sources
+linkup-search search "what is machine learning?" \
+  --output-type sourcedAnswer \
+  --json
+
+# Get raw structured data
+linkup-search search "python tutorials" \
+  --output-type structured \
+  --json
+```
+
+### JavaScript Rendering
+```bash
+# Fetch pages with dynamic content
+linkup-search fetch "https://example.com/dynamic-page" \
+  --render-js \
+  --json
+```
+
+---
+
+## 8. Extending the Skill
+
+If new capabilities are required, the project can be extended:
+
+1. **Add new CLI tools** - Create new entry points in `pyproject.toml`
+2. **Implement new search providers** - Add support for additional APIs
+3. **Enhance output formats** - Add CSV, XML, or custom formats
+4. **Add authentication** - Support OAuth or API key rotation
+
+Update this `SKILL.md` with new usage examples when extending functionality.
+
+---
+
+*End of Skill description.*
+*Version: 2.0.0*
+*Repository: https://github.com/uv-genai/agent-web-search*
+</skill>

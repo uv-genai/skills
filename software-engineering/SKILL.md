@@ -16,7 +16,16 @@ This skill provides guidence for quality focused software development and archit
 - Decompose long (more than 120 lines of code) components and functions into multiple smaller components and functions. If they cannot be used anywhere else, keep it in the same file. But if file longer than 200 lines of code, it should be split into multiple files.
 - Use arrow functions instead of function declarations when possible
 
+## Mandatory software engineering principles
+
+- SOLID
+- DRY
+- KISS
+- YAGNI
+- Tell Don’t Ask
+
 ### Best Practices
+
 
 #### Library-First Approach
 

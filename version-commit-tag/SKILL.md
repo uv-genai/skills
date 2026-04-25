@@ -1,5 +1,5 @@
 ---
-description: when typing `vct` or `version-commit-tag`: update AGENTS.md, update README.md, if git repository not created, create it, commit and tag.
+description: update AGENTS.md, update README.md, if git repository not created, create it, commit and tag.
 ---
 
 # /version-commit-tag
