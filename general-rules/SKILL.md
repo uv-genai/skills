@@ -5,6 +5,10 @@ description: General rules to apply to software development projects. Use this s
 
 # MANDATORY RULES FOR SOFTWARE DEVELOPMENT
 
+- Never ever guess, always verify artefacts exist.
+- Never ever guess the name of classes, constants, variables, functions, methods, etc.
+- Never ever guess the signature of methods.
+- Never ever guess the signature of functions.
 - No regressions.
 - Do not modify code that works.
 - No mockups, dummies, placehoders, fallbacks or defaults.

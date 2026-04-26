@@ -41,6 +41,9 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 
 ### Python code
 
+* Never ever guess, always verify APIs and modules exist.
+* Never ever guess a function name or signature, always search and verify it exists first.
+* Never ever quess a class name or method signature, always search and verify it exists first.
 * constants **MUST** be defined in frozen dataclasses. Use frozen dataclasses to define constants.
 * Minimize the use of long if/else chains by using the match statement.
 * Do not use global variables. Encapulate settings, constants and configuration in dataclasses.
