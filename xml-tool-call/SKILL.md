@@ -1,8 +1,9 @@
-# XML Tool Call Parsing
-
-**Purpose:** Recognize, parse, and execute tool calls embedded in XML-like markup sent by the user.
-
 ---
+name: xml-tool-call
+description: Recognize, parse, and execute tool calls embedded in XML-like markup sent by the user.
+---
+
+# XML Tool Call Parsing
 
 ## Format Specification
 
