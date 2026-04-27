@@ -14,6 +14,11 @@ description: >
 
 This skill helps the coding agent navigate the **[Python Arcade Library](https://api.arcade.academy/)** documentation. Arcade is an easy-to-learn Python library for creating 2D video games. It provides a friendly API for beginners and experts alike.
 
+## Coordinate system
+
+Mandatory: when using the Arcade library **ALWAYS** use the Arcade coordinate system which has
+the origin (0,0) in the bootm left corner.
+
 ### Key Links
 
 | Resource | URL |
