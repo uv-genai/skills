@@ -171,6 +171,8 @@ linkup-search search "<query>" [-n <N>] [--depth <depth>] [--output-type <type>]
 * `--include-domains <domain1> [domain2 ...]` – restrict to specific domains (optional)
 * `--exclude-domains <domain1> [domain2 ...]` – exclude specific domains (optional)
 
+Never ever use both `--output-type` and `--json` together, it's one or the other.
+
 ### Search JSON output schema (searchResults)
 ```json
 {
