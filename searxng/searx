@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# SearXNG search CLI wrapper
+# Usage: searx "<query>" [-n N] [-c category] [-l language]
+set -euo pipefail
+
+SEARXNG_URL="${SEARXNG_URL:-http://strix-halo-1.local:8888}"
+RESULTS=10
+CATEGORY="general"
+LANGUAGE="en"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -n) RESULTS="$2"; shift 2 ;;
+    -c) CATEGORY="$2"; shift 2 ;;
+    -l) LANGUAGE="$2"; shift 2 ;;
+    -h|--help)
+      echo "Usage: searx \"<query>\" [-n N] [-c category] [-l language]"
+      echo ""
+      echo "Options:"
+      echo "  -n N          Number of results (default: 10)"
+      echo "  -c category   Search category (general, news, images, videos, files, it, science, social media)"
+      echo "  -l language   Language code (default: en)"
+      echo "  -h            Show this help"
+      exit 0
+      ;;
+    *) QUERY="$1"; shift ;;
+  esac
+done
+
+if [[ -z "${QUERY:-}" ]]; then
+  echo "Error: query is required" >&2
+  echo "Usage: searx \"<query>\" [-n N] [-c category] [-l language]" >&2
+  exit 1
+fi
+
+RESPONSE=$(curl -sf --max-time 15 \
+  "${SEARXNG_URL}/search" \
+  --data-urlencode "q=${QUERY}" \
+  --data-urlencode "categories=${CATEGORY}" \
+  -d "language=${LANGUAGE}" \
+  -d "format=json" \
+  2>/dev/null) || { echo "Error: failed to reach SearXNG at ${SEARXNG_URL}" >&2; exit 1; }
+
+echo "${RESPONSE}" | jq -c ".results[:${RESULTS}] | .[] | {title, url, snippet: (.snippet // \"\")}"
