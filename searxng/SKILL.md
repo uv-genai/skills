@@ -19,8 +19,10 @@ searx "<query>" [-n N] [-c category] [-l language]
 | `-n N` | Number of results | 10 |
 | `-c category` | Search category | `general` |
 | `-l language` | Language code | `en` |
+| `-t time-range` | Filter by age | none |
 
-Categories: `general`, `news`, `images`, `videos`, `files`, `it`, `science`, `social media`
+Categories: `general`, `news`, `images`, `videos`, `files`, `it`, `science`, `social media`, and 20+ more.
+Time range: `day`, `week`, `month`, `year`
 
 ## Output
 One JSON object per line (NDJSON) with fields: `title`, `url`, `snippet`.
