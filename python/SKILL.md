@@ -36,6 +36,8 @@ All the instructions in this document **ARE MANDATORY** and must be followed at 
 * uv's `--bare` option must be used to avoid creating the `main.py` file.
 * you are not allowed to call python, python3 or python3.x or pip, or pip3 directly.
 * use the `uv init --bare` option to avoid creating the `main.py` file.
+* never ever try to install the project you are building with `uv pip install .`.
+* if you are building an executable is must run without requiring installation.
 
 ## Python development
 

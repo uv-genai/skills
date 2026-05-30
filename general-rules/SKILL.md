@@ -5,6 +5,8 @@ description: General rules to apply to software development projects. Use this s
 
 # MANDATORY RULES FOR SOFTWARE DEVELOPMENT
 
+- Stick to the plan.
+- Follow the user instructions, e.g. if the user asks you to load a skill, just load, understand and memorize the skill, DO NOT START USING IT until it's required.
 - Never ever guess, always verify artefacts exist.
 - Never ever guess the name of classes, constants, variables, functions, methods, etc.
 - Never ever guess the signature of methods.
