@@ -2,102 +2,103 @@
 name: kimi-webbridge
 description: |
   Kimi WebBridge lets AI control the user's real browser — navigate, click, type, read, screenshot, and interact with any website using the user's actual login sessions. Use this skill whenever the user wants to interact with websites, automate browser tasks, scrape web content, or perform any action requiring a real browser. Also use when the user mentions "browser", "webpage", "open URL", "screenshot", or asks to read/interact with any website. Use even for simple-sounding browser requests — the daemon handles all complexity.
+metadata:
+  version: "1.9.21"
 ---
 
 # Kimi WebBridge
 
 Control the user's real browser (with their login sessions) via a local daemon at `http://127.0.0.1:10086`.
 
-## Health check (always do this first)
-
-```bash
-~/.kimi-webbridge/bin/kimi-webbridge status
-```
-
-Then act on the result:
-
-- **`running: true` and `extension_connected: true`** — healthy. Proceed with the tool calls below.
-- **Anything else** (command not found, `running: false`, `extension_connected: false`, errors) — **Read `references/operations.md`** in this skill directory. It has the install / start / diagnose routing table.
-
-Don't guess fixes here — every non-healthy state is handled in `references/operations.md`.
-
 ## Tools
 
 | Tool | Args | Returns | Note |
 |------|------|---------|------|
-| `navigate` | `url`, `newTab`(bool), `group_title` | `{success, url, tabId}` | Always use `newTab:true` on first call. `group_title` sets the tab group's visible label |
-| `find_tab` | `url`, `active`(bool) | `{success, url, tabId}` | **Reuse an already-open tab** — pass any URL or domain; `active:true` picks the tab the user is currently viewing, default picks the leftmost match |
+| `navigate` | `url`, `newTab`(bool), `group_title` | `{success, url, tabId}` | First call opens a tab — see [Tabs](#tabs-and-the-current-tab). `group_title` sets the group's visible label |
+| `find_tab` | `url`, `active`(bool) | `{success, url, tabId}` | Select an already-open tab as the current one — see [Tabs](#tabs-and-the-current-tab) |
 | `snapshot` | — | `{url, title, tree}` with `@e` refs | **Accessibility tree** (text) — use this to read page content and locate elements |
 | `click` | `selector` (@e ref or CSS) | `{success, tag, text}` | Synthetic `el.click()` |
 | `fill` | `selector`, `value` | `{success, tag, mode}` | Works on `<input>`/`<textarea>` AND `[contenteditable]` (ProseMirror/Lexical/Slate). `mode` is `"value"` or `"contenteditable"` |
 | `evaluate` | `code` (supports async/await) | `{type, value}` | |
-| `screenshot` | `format`(png\|jpeg), `quality`(0-100), optional `selector` (@e/CSS), optional `path` | `{format, path, sizeBytes, mimeType}` | Daemon writes file and returns its path; agent opens via `Read` tool. With `path` daemon writes there (overwrites); without it picks a default under OS temp dir |
+| `cdp` | `method`, `params` | raw CDP response | Raw `chrome.debugger` passthrough — what `evaluate` is to JS, `cdp` is to CDP. Low-level escape hatch for cases the tools above don't cover |
+| `screenshot` | `format`(png\|jpeg), `quality`(0-100), optional `selector` (@e/CSS), optional `path` | `{format, path, sizeBytes, mimeType}` | Returns a file path, not base64 — see [Screenshots](#screenshots) |
 | `network` | `cmd`(start\|stop\|list\|detail), `filter`, `requestId` | request/response data | |
 | `upload` | `selector`, `files`(string[]) | `{success, fileCount}` | |
-| `save_as_pdf` | `paper_format`, `landscape`, `scale`, `print_background`, optional `path` | `{path, sizeBytes, mimeType, pageTitle}` | Render current page → PDF. With `path` daemon writes there (overwrites); without it picks a default under OS temp dir using the page title as the filename |
+| `save_as_pdf` | `paper_format`, `landscape`, `scale`, `print_background`, optional `path` | `{path, sizeBytes, mimeType, pageTitle}` | Render current page → PDF, returns a file path — see [Save as PDF](#save-the-current-page-as-pdf) |
 | `list_tabs` | — | `{success, tabs:[{tabId, url, title, active, groupTitle}]}` | Inspect tabs in the current session |
 | `close_tab` | — | `{success, closed: bool}` | Close the current tab in the session |
-| `close_session` | — | `{success, closed: int}` | Close all tabs — `closed` is the count. Always call at task end |
+| `close_session` | — | `{success, closed: int}` | Close all tabs in the session — `closed` is the count. See [Sessions](#sessions) for when to call |
 
-### Using find_tab
+### Tabs and the current tab
 
-Use `find_tab` when the user explicitly asks to operate on an already-open tab. It matches by domain, so any URL on the same site works. Without `active:true`, returns the leftmost matching tab; with `active:true`, returns the tab the user is currently viewing — pass it when the user says "用我打开的 X" / "在我当前的 X 页面上".
+Single-tab tools (`snapshot`, `click`, `fill`, `screenshot`, `save_as_pdf`) act on the **current tab** — the one you most recently opened with `navigate` or selected with `find_tab`.
+
+- **Opening pages**: use `newTab:true` when pages should coexist (comparing, cross-referencing); omit it to send the current tab to a new URL.
+- **Going back to an earlier tab**: call `find_tab` to make a tab you already opened the current one again. Pass the tab's **full URL** — take it from `list_tabs` or the earlier `navigate` result. A bare root domain (`kimi.com`) may miss a `www.kimi.com` tab, so prefer the exact URL. `active:true` picks the tab the user is currently viewing — use it when the user asks to act on a page they already have open ("use my open X tab" / "the X page I'm viewing"); otherwise the leftmost match wins.
+- If `find_tab` returns "no open tab found", the page isn't open — `navigate` with `newTab:true` instead.
 
 ```bash
 curl -s -X POST http://127.0.0.1:10086/command \
-  -d '{"action":"find_tab","args":{"url":"https://www.kimi.com","active":true},"session":"kimi"}'
+  -d '{"action":"find_tab","args":{"url":"https://www.kimi.com","active":true},"session":"k26-research"}'
 ```
-
-If `find_tab` returns "no open tab found", the page is not open — fall back to `navigate` with `newTab:true`.
 
 ### Call Format
 
+Every command carries a top-level `session` naming the current task — see [Sessions](#sessions) below. The examples in later sections omit it only for brevity; in real calls always include it. The command format depends on the user's OS.
+
+**macOS / Linux** — inline JSON is fine:
+
 ```bash
 curl -s -X POST http://127.0.0.1:10086/command \
   -H 'Content-Type: application/json' \
-  -d '{"action":"navigate","args":{"url":"https://example.com","newTab":true}}'
+  -d '{"action":"navigate","args":{"url":"https://example.com","newTab":true,"group_title":"My task"},"session":"my-task"}'
 ```
+
+**Windows (PowerShell / cmd)** — the shell corrupts non-ASCII characters (Chinese etc.) carried inline in command arguments or pipes; they reach the daemon as `?` and the text is unrecoverable. Send **every** request as a file body instead:
+
+1. Write the JSON body to a **uniquely-named** temp file with your own file-write tool — never with shell `echo`/heredoc, which corrupts non-ASCII the same way. Give **every** request its own filename with a random suffix (e.g. `webbridge-req-<random>.json`) so concurrent requests never share a file and overwrite each other.
+2. POST the file with `curl.exe` — always `curl.exe`, never bare `curl`, which Windows PowerShell aliases to `Invoke-WebRequest`:
+
+```powershell
+curl.exe -s -X POST http://127.0.0.1:10086/command -H "Content-Type: application/json" --data-binary "@$env:TEMP\webbridge-req-<random>.json"
+```
+
+3. Delete the temp file as soon as the request returns — don't leave request bodies on disk.
+
+The bash one-liner examples elsewhere in this document are for brevity — on Windows, send the same JSON via the file-body pattern above instead of inlining it.
 
 ## Sessions
 
-Each session maps to a separate browser tab group. Use different session names for different sites to keep operations isolated.
+**One task = one session = one tab group.** A `session` collects every tab the task opens into one tab group, so the user sees a single group for "what the agent is doing right now". Pass it as a **top-level field** of the request body (not inside `args`).
 
-Add `"session":"name"` to the request body:
-
-```bash
-curl -s -X POST http://127.0.0.1:10086/command \
-  -d '{"action":"navigate","args":{"url":"https://example.com","newTab":true},"session":"my-task"}'
-```
-
-Always assign distinct session names when working with multiple sites in parallel.
-
-## Screenshots: read the returned path
-
-The daemon writes the image to disk and returns `{format, path, sizeBytes, mimeType}`. Read the `.path` and open it via the `Read` tool — the LLM cannot interpret raw base64 image data, so the file-path indirection is what makes the screenshot actually viewable.
+- **Pick one session name at the task's start, put it on every command, and never switch mid-task — even across different sites.** Switching session names per site is the #1 cause of fragmented tab groups.
+- Name it after the **task**, not the site (`camping-research`, `phone-compare`). Use multiple sessions only for genuinely unrelated parallel tasks.
+- `group_title` is the human-readable group label — write it in the user's language, on the **first** `navigate` of the task.
 
 ```bash
-# Default — PNG, full visible viewport, daemon picks a temp-dir filename
+# First tab: set session + a human label (in the user's language)
 curl -s -X POST http://127.0.0.1:10086/command \
-  -H 'Content-Type: application/json' \
-  -d '{"action":"screenshot","args":{}}'
-
-# Caller-supplied path — daemon writes there exactly (overwrites if exists)
+  -d '{"action":"navigate","args":{"url":"https://www.kimi.com","newTab":true,"group_title":"K2.6 feature research"},"session":"k26-research"}'
+# Another site, same task → same session → joins the same group automatically
 curl -s -X POST http://127.0.0.1:10086/command \
-  -H 'Content-Type: application/json' \
-  -d '{"action":"screenshot","args":{"path":"/Users/me/Desktop/state.png"}}'
-
-# JPEG with quality
-curl -s -X POST http://127.0.0.1:10086/command \
-  -d '{"action":"screenshot","args":{"format":"jpeg","quality":60}}'
-
-# Element-only screenshot via @e ref from snapshot (or any CSS selector)
-curl -s -X POST http://127.0.0.1:10086/command \
-  -d '{"action":"screenshot","args":{"selector":"@e123"}}'
+  -d '{"action":"navigate","args":{"url":"https://www.moonshot.cn","newTab":true},"session":"k26-research"}'
 ```
 
-`path` semantics mirror Playwright / Puppeteer — caller-supplied path is honored verbatim, parent directories are auto-created, existing files are overwritten. To avoid overwrite use a unique filename yourself.
+When the task is done and the user no longer needs the pages, `close_session` clears the group. If they might follow up, deliver your answer first and leave the tabs open — closing too eagerly throws away work they can still see.
 
-After parsing `.data.path` from the response, call the `Read` tool with that path to view the image.
+## Screenshots
+
+The daemon writes the image to disk and returns `{format, path, sizeBytes, mimeType}` — never base64, since the model can't read raw image bytes. Take the `.path` and open it with the `Read` tool to actually see it.
+
+```bash
+# Default: PNG of the visible viewport, daemon picks a temp path
+curl ... -d '{"action":"screenshot","args":{}}'
+# Options (each independent): JPEG quality, element-only via @e/CSS selector, custom output path
+curl ... -d '{"action":"screenshot","args":{"format":"jpeg","quality":60}}'
+curl ... -d '{"action":"screenshot","args":{"selector":"@e123"}}'
+```
+
+A caller-supplied `path` is honored verbatim (parent dirs created, existing file overwritten) — use a unique name to avoid clobbering. `save_as_pdf` follows the same rule.
 
 ## Prefer snapshot over CSS/JS selectors
 
@@ -115,15 +116,9 @@ Fall back to `evaluate` (JS) only when:
 
 ## Text input — use `fill`
 
-`fill` handles all three text input shapes. Pass selector (CSS or `@e` ref) + value:
+`fill` (selector = CSS or `@e` ref, plus the value) works on `<input>`/`<textarea>` (returns `mode: "value"`) and on `[contenteditable]` rich editors — ProseMirror, TipTap, Lexical, Slate, Quill, etc. (returns `mode: "contenteditable"`), firing the right input events so the page reacts.
 
-| Target | What `fill` does | Returned `mode` |
-|--------|------|------|
-| `<input>` / `<textarea>` | Sets `.value` via native setter, fires `input`/`change`. | `"value"` |
-| `[contenteditable]` (ProseMirror / TipTap / Lexical / Slate / Quill etc.) | Focuses, selects all existing content, calls `document.execCommand('insertText', ...)` which fires `beforeinput`/`input` with `inputType:'insertText'` and `data:value`. | `"contenteditable"` |
-| Other element | Best-effort `.value` + events. | `"value"` |
-
-`fill` is **clear-and-insert**: existing content is replaced. For "append to existing text", read the current value via `evaluate`, concatenate, then `fill` with the result.
+`fill` is **clear-and-insert**: existing content is replaced. To append, read the current value via `evaluate`, concatenate, then `fill` with the result.
 
 ## Form submit / special keys
 
@@ -135,9 +130,7 @@ There's no separate "press Enter" tool. To submit a form, click the submit butto
 
 ## Save the current page as PDF
 
-`save_as_pdf` renders the current page to PDF, writes it to `/tmp/kimi-webbridge-pdfs/`, and returns the file path (the daemon strips the base64 — agent never sees raw PDF bytes).
-
-All args optional:
+`save_as_pdf` renders the current page to PDF and returns the file path. All args optional:
 - `paper_format`: `letter` (default) \| `a4` \| `legal` \| `a3` \| `tabloid`
 - `landscape`: `false` (default)
 - `scale`: `1.0` (default), range `[0.1, 2.0]`
@@ -150,20 +143,35 @@ Decoded PDF cap is 100 MB. Above that the daemon refuses; reduce `scale` or spli
 
 ## Known limitations
 
-- **Sites that strictly check `event.isTrusted`** (some banking portals, captcha challenges) reject `fill` and `click` because both go through DOM-level synthetic events (`isTrusted=false`). This is a product boundary, not a bug — no automation primitive that runs on the user's machine without stealing OS focus can produce trusted events on these sites.
+- **Sites that strictly check `event.isTrusted`** (some banking portals, captchas) ignore `click` / `fill` because those fire DOM-level synthetic events (`isTrusted=false`). For these, tell the user the page needs manual interaction. (Trusted input is possible at the protocol level via the `cdp` escape hatch, but treat that as advanced.)
 - **Cross-origin iframes**: `fill`, `click`, `evaluate`, and `snapshot` operate on the top frame. If a target element lives in a same-page iframe from a different origin (e.g. embedded sandbox demos), navigate to the iframe's URL directly instead.
 
-## Versions
+## If a tool call fails (daemon or extension not ready)
 
-Daemon, extension, and this skill share a 1:1 version string. Read both via:
+**If a tool call can't reach the daemon (connection refused), start it yourself — don't ask the user. This is safe to run anytime: it no-ops if the daemon is already up.**
+
+**macOS / Linux:**
 
 ```bash
-~/.kimi-webbridge/bin/kimi-webbridge status
-# {"version":"<daemon>", "extension_version":"<extension>"}
+~/.kimi-webbridge/bin/kimi-webbridge start
 ```
 
-If a tool returns an error containing **"Please update the Kimi WebBridge extension"**, the user's extension is older than this skill. Tell the user:
+**Windows (PowerShell):**
 
-> 请更新 Kimi WebBridge 浏览器扩展后重试：https://kimi.com/features/webbridge
+```powershell
+& "$env:USERPROFILE\.kimi-webbridge\bin\kimi-webbridge.exe" start
+```
 
-Don't retry the failed tool. Don't auto-switch skill versions based on `extension_version` — the pairing protocol isn't finalized.
+Then retry the tool call. If it still fails — or the browser extension won't connect — point the user to the help page instead of deep-troubleshooting:
+
+- English: https://www.kimi.com/features/webbridge
+- 中文: https://www.kimi.com/zh-cn/features/webbridge
+
+Never run `stop` / `restart` / `uninstall` automatically — those kill a running daemon. See `references/operations.md` for anything deeper.
+
+## Version mismatches
+
+If a tool returns an error containing **"Please update the Kimi WebBridge extension"**, the user's browser extension is older than this skill. Don't retry, and don't try to reconcile versions yourself — just tell the user, in their language, to update the extension and retry:
+
+- English: https://www.kimi.com/features/webbridge
+- 中文: https://www.kimi.com/zh-cn/features/webbridge

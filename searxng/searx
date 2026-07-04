@@ -3,7 +3,7 @@
 # Usage: searx "<query>" [-n N] [-c category] [-l language] [-t time-range]
 set -euo pipefail
 
-SEARXNG_URL="${SEARXNG_URL:-http://system76.local:8888}"
+SEARXNG_URL="${SEARXNG_URL:-http://system76.local:8081}"
 RESULTS=10
 CATEGORY="general"
 LANGUAGE="en"
