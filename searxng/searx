@@ -3,7 +3,7 @@
 # Usage: searx "<query>" [-n N] [-c category] [-l language] [-t time-range]
 set -euo pipefail
 
-SEARXNG_URL="${SEARXNG_URL:-http://strix-halo-1.local:8888}"
+SEARXNG_URL="${SEARXNG_URL:-http://system76.local:8081}"
 RESULTS=10
 CATEGORY="general"
 LANGUAGE="en"
@@ -36,19 +36,16 @@ if [[ -z "${QUERY:-}" ]]; then
   exit 1
 fi
 
-CURL_ARGS=(
-  -sf --max-time 15
-  "${SEARXNG_URL}/search"
-  --data-urlencode "q=${QUERY}"
-  --data-urlencode "categories=${CATEGORY}"
-  -d "language=${LANGUAGE}"
-  -d "format=json"
-)
+URL="${SEARXNG_URL}/search"
+RESPONSE=$(curl -s --max-time 15 -G "$URL" \
+  --data-urlencode "q=${QUERY}" \
+  --data-urlencode "categories=${CATEGORY}" \
+  --data-urlencode "language=${LANGUAGE}" \
+  --data-urlencode "format=json" \
+  --data-urlencode "pageno=1" \
+  --data-urlencode "time_range=${TIME_RANGE}" 2>/dev/null) || {
+  echo "Error: failed to reach SearXNG at ${SEARXNG_URL}" >&2
+  exit 1
+}
 
-if [[ -n "${TIME_RANGE}" ]]; then
-  CURL_ARGS+=( -d "time_range=${TIME_RANGE}" )
-fi
-
-RESPONSE=$(curl "${CURL_ARGS[@]}" 2>/dev/null) || { echo "Error: failed to reach SearXNG at ${SEARXNG_URL}" >&2; exit 1; }
-
-echo "${RESPONSE}" | jq -c ".results[:${RESULTS}] | .[] | {title, url, snippet: (.snippet // \"\")}"
+echo "${RESPONSE}" | jq -c ".results[:${RESULTS}] | .[] | {title, url, snippet: (.content // \"\")}"
