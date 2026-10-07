@@ -75,6 +75,31 @@ cp /path/to/agent-web-search/.env.example .env
 # Edit .env with your API keys
 ```
 
+### ⚠️ If the env vars appear unset — try a login shell before giving up
+
+Agents frequently run in a **non-login, non-interactive** shell (e.g. `bash -c`), which does **not** source login files like `~/.zprofile`, `~/.profile`, or `~/.bash_profile`. Keys exported there are invisible to such a shell, so a bare `echo "$BRAVE_API_KEY"` can look empty even though the keys are configured.
+
+**Before reporting that a key is unset, retry the command through a login shell**, which sources the user's login profile:
+
+```bash
+# zsh (sources ~/.zshenv, ~/.zprofile)
+zsh -lc 'brave-search "query" -n 5 --json'
+
+# bash (sources ~/.bash_profile / ~/.profile)
+bash -lc 'brave-search "query" -n 5 --json'
+
+# fish
+fish --login -c 'brave-search "query" -n 5 --json'
+```
+
+Quick presence check first (without printing the secret):
+
+```bash
+zsh -lc 'echo BRAVE=${BRAVE_API_KEY:+<set>} LINKUP=${LINKUP_API_KEY:+<set>}'
+```
+
+Only report a key as unset if it is still absent across these login shells. Prefer whichever login shell the user's environment actually populates (macOS default is `zsh`).
+
 ---
 
 ## 2. Brave Search Tool (`brave-search`)
