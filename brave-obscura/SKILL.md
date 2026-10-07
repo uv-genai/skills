@@ -149,7 +149,8 @@ obscura scrape "<url>" -e "({ title: document.querySelector('h1').textContent, p
 
 ## Notes & limits
 - Obscura renders JavaScript (full browser engine) — good for SPAs and dynamic pages.
-- **CLI `fetch` is stable.** Very JS-heavy pages driven through the **CDP `serve` path** can hit an upstream reentrancy bug (`op_initial_frame` re-entering `op_register_document_realm`) that aborts the worker; the CLI path is unaffected.
+- **Reentrancy abort on some JS-heavy pages.** Certain pages can trigger an upstream reentrancy bug (`op_initial_frame` re-entering `op_register_document_realm` → `panic in a function that cannot unwind` → SIGABRT / exit 134). This affects **both the CDP `serve` path AND the CLI `fetch` path** (observed aborting on a JS-heavy news article via plain `fetch`). It is page-specific, not universal — most pages fetch fine.
+  - **If a fetch aborts:** retry a different source from the search results, or use `--dump original` (bypasses the browser/JS layer entirely) to get the raw body. For a clean-text fallback when the rendered path aborts, `--dump original` + a local HTML→text strip is the workaround.
 - `--dump original` bypasses rendering — use it for non-HTML resources (JSON, images).
 - For a page where no content selector works, `--dump text` (whole page) + a post-process strip is the fallback.
 
